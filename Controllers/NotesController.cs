@@ -157,18 +157,24 @@ namespace blog.Controllers
         // GET: Notes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Note == null)
-            {
-                return NotFound();
-            }
+            if(_context.Note == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
 
-            var note = await _context.Note
-                .Include(n => n.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (note == null)
-            {
+            if (id == null)
                 return NotFound();
-            }
+
+            var note = await _context.Note.FindAsync(id);
+
+            if (note == null)
+                return NotFound();
+            
+            var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(currentUserid == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            
+            if(note.UserId != currentUserid.Value)
+                return StatusCode(StatusCodes.Status401Unauthorized);
 
             return View(note);
         }
