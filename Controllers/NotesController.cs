@@ -49,6 +49,8 @@ namespace blog.Controllers
 
             if (note == null)
                 return NotFound();
+
+            // TODO: verify if current user is the note author    
             
             return View(note);
         }
@@ -56,7 +58,13 @@ namespace blog.Controllers
         // GET: Notes/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            var id = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(id == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
+            ViewData["UserId"] = id.Value;
+            
             return View();
         }
 
