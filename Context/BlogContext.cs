@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace blog.Areas.Identity.Data;
+namespace blog.Context;
 
 public class BlogContext : IdentityDbContext<User>
 {
