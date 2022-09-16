@@ -185,16 +185,24 @@ namespace blog.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Note == null)
-            {
-                return Problem("Entity set 'BlogContext.Note'  is null.");
-            }
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            
             var note = await _context.Note.FindAsync(id);
+
             if (note != null)
             {
-                _context.Note.Remove(note);
-            }
+                var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            await _context.SaveChangesAsync();
+                if(currentUserid == null)
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+
+                if(currentUserid.Value != note.UserId)
+                    return StatusCode(StatusCodes.Status401Unauthorized);
+
+                _context.Note.Remove(note);
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
