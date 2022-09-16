@@ -73,15 +73,24 @@ namespace blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body,UserId")] Note note)
+        public async Task<IActionResult> Create([Bind("Title,Body,UserId")] Note note)
         {
+            var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(currentUserid == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            
+            if(currentUserid.Value != note.UserId)
+                return StatusCode(StatusCodes.Status401Unauthorized); //a user cannot create a note on behalf of another user
+
             if (ModelState.IsValid)
             {
                 _context.Add(note);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", note.UserId);
+
+            ViewBag.UserId = currentUserid.Value;
             return View(note);
         }
 
