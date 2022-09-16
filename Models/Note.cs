@@ -17,6 +17,10 @@ public class Note{
      [Display(Name = "Cuerpo")]
     public string? Body {get; set;}
 
+    [DataType(DataType.Date)]
+    [Display(Name = "Fecha de creación")]
+    public DateTime CreationDate{get;set;}
+
     [Required]
     public string? UserId {get; set;}
     public virtual User? User {get; set;}
