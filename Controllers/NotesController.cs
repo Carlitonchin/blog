@@ -115,12 +115,20 @@ namespace blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Body")] Note note)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,UserId")] Note note)
         {
             if (id != note.Id)
             {
                 return NotFound();
             }
+
+            var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(currentUserid == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            
+            if(currentUserid.Value != note.UserId)
+                return StatusCode(StatusCodes.Status401Unauthorized);
 
             if (ModelState.IsValid)
             {
@@ -142,7 +150,7 @@ namespace blog.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", note.UserId);
+            
             return View(note);
         }
 
