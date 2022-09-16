@@ -25,6 +25,9 @@ namespace blog.Controllers
         // GET: Notes
         public IActionResult Index()
         {
+            if(_context.Note == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
             var id = User.FindFirst(ClaimTypes.NameIdentifier);
             
             if(id == null)
@@ -36,7 +39,10 @@ namespace blog.Controllers
         // GET: Notes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Note == null)
+            if(_context.Note == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+                
+            if (id == null)
             {
                 return NotFound();
             }
