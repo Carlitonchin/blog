@@ -63,8 +63,8 @@ namespace blog.Controllers
             if(id == null)
                 return StatusCode(StatusCodes.Status500InternalServerError);
 
-            ViewData["UserId"] = id.Value;
-            
+            ViewBag.UserId = id.Value;
+
             return View();
         }
 
