@@ -50,7 +50,13 @@ namespace blog.Controllers
             if (note == null)
                 return NotFound();
 
-            // TODO: verify if current user is the note author    
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(currentUserId == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);    
+
+            if(currentUserId.Value != note.UserId)
+                return StatusCode(StatusCodes.Status401Unauthorized);
             
             return View(note);
         }
