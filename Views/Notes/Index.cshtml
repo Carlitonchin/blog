@@ -9,33 +9,72 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Body)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+
+<div>
 @foreach (var item in Model) {
-        <tr>
-            <td>
+        <div class="note-card">
+            <div class="flex-row">
+            <h2>
                 @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+            </h2>
+            <div class="card-options">
+                <a asp-action="Edit" asp-route-id="@item.Id">
+                    <img class="icon" src="/icons/edit.svg"/>
+                </a>
+                @{/*<a asp-action="Details" asp-route-id="@item.Id">Details</a>*/}
+                <a asp-action="Delete" asp-route-id="@item.Id">
+                    <img class="icon" src="/icons/delete.svg"/>
+                </a>
+            </div>
+            </div>
+            <p class="date-text">@Html.DisplayNameFor(model => model.CreationDate): <span class="date">@Html.DisplayFor(modelItem => item.CreationDate)</span></p>
+        </div>
 }
-    </tbody>
-</table>
+</div>
+
+<style>
+    .note-card{
+        position:relative;
+        padding:3rem;
+        width: fit-content;
+        border-radius:10px;
+        border:1px solid gray;
+        cursor:pointer;
+    }
+
+    .note-card:hover{
+        background:black;
+        background: rgba(0, 0, 0, 0.05);
+        color:blue;
+    }
+
+
+    .card-options{
+        position:absolute;
+        top:0.5rem;
+        right:0.5rem;
+    }
+
+    .card-options>a{
+        text-decoration:none;
+        padding:0.2rem;
+    }
+
+    .card-options>a:hover>.icon{
+        scale:1.3;
+    }
+
+    .icon{
+        width: 2rem;
+        height:1.5rem;
+        animation-duration: 1000ms;
+    }
+
+    .date-text{
+        color:black;
+    }
+
+    .date{
+        color:gray;
+    }
+</style>
