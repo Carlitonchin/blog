@@ -97,17 +97,16 @@ namespace blog.Controllers
         // GET: Notes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Note == null)
-            {
+            if(_context.Note == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
+            if (id == null)
                 return NotFound();
-            }
 
             var note = await _context.Note.FindAsync(id);
             if (note == null)
-            {
                 return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", note.UserId);
+            
             return View(note);
         }
 
@@ -116,7 +115,7 @@ namespace blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,UserId")] Note note)
+        public async Task<IActionResult> Edit(int id, [Bind("Title,Body")] Note note)
         {
             if (id != note.Id)
             {
