@@ -2,5 +2,4 @@
 obj
 bin
 *.txt
-*.db
 *.db*
