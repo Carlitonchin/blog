@@ -14,7 +14,7 @@ public class Note{
 
     [Required(ErrorMessage ="Escriba algo en el cuerpo")]
      [StringLength(250000, ErrorMessage = "El cuerpo debe tener máximo 250 mil caracteres")]
-     [Display(Name = "Título")]
+     [Display(Name = "Cuerpo")]
     public string? Body {get; set;}
 
     [Required]
