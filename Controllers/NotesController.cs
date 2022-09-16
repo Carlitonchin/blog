@@ -41,9 +41,8 @@ namespace blog.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Note
-                .Include(n => n.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var note = await _context.Note.FindAsync(id);
+
             if (note == null)
             {
                 return NotFound();
