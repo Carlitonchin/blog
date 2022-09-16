@@ -22,9 +22,8 @@ namespace blog.Controllers
         // GET: Notes
         public async Task<IActionResult> Index()
         {
-              return _context.Note != null ? 
-                          View(await _context.Note.ToListAsync()) :
-                          Problem("Entity set 'BlogContext.Note'  is null.");
+            var blogContext = _context.Note.Include(n => n.User);
+            return View(await blogContext.ToListAsync());
         }
 
         // GET: Notes/Details/5
@@ -36,6 +35,7 @@ namespace blog.Controllers
             }
 
             var note = await _context.Note
+                .Include(n => n.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (note == null)
             {
@@ -48,6 +48,7 @@ namespace blog.Controllers
         // GET: Notes/Create
         public IActionResult Create()
         {
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -64,6 +65,7 @@ namespace blog.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", note.UserId);
             return View(note);
         }
 
@@ -80,6 +82,7 @@ namespace blog.Controllers
             {
                 return NotFound();
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", note.UserId);
             return View(note);
         }
 
@@ -115,6 +118,7 @@ namespace blog.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", note.UserId);
             return View(note);
         }
 
@@ -127,6 +131,7 @@ namespace blog.Controllers
             }
 
             var note = await _context.Note
+                .Include(n => n.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (note == null)
             {
