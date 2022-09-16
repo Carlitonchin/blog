@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using blog.Context;
 using blog.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace blog.Controllers
 {
+    [Authorize]
     public class NotesController : Controller
     {
         private readonly BlogContext _context;
@@ -20,10 +23,14 @@ namespace blog.Controllers
         }
 
         // GET: Notes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var blogContext = _context.Note.Include(n => n.User);
-            return View(await blogContext.ToListAsync());
+            var id = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(id == null)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
+            return View(_context.Note.Where(n=>n.UserId == id.Value));
         }
 
         // GET: Notes/Details/5
