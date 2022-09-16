@@ -41,19 +41,15 @@ namespace blog.Controllers
         {
             if(_context.Note == null)
                 return StatusCode(StatusCodes.Status500InternalServerError);
-                
-            if (id == null)
-            {
-                return NotFound();
-            }
 
+            if (id == null)
+                return StatusCode(StatusCodes.Status400BadRequest);
+            
             var note = await _context.Note.FindAsync(id);
 
             if (note == null)
-            {
                 return NotFound();
-            }
-
+            
             return View(note);
         }
 
