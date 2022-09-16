@@ -8,7 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("BlogContextCon
 builder.Services.AddDbContext<BlogContext>(options =>
     options.UseSqlite(connectionString));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<BlogContext>();
 
 // Add services to the container.
