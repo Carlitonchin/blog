@@ -16,6 +16,9 @@ public class Note{
      [StringLength(250000, ErrorMessage = "El cuerpo debe tener máximo 250 mil caracteres")]
      [Display(Name = "Título")]
     public string? Body {get; set;}
+    
+    [DataType(DataType.Date)]
+    public DateTime CreationDate{get;set;}
 
     [Required]
     public string? UserId {get; set;}
