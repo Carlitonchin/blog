@@ -11,8 +11,8 @@
 </div>
 
 <div class="form-group mt-3">
-<input class="form-control" placeholder="Filtrar por título"/>
-<input class="form-control mt-1" placeholder="Filtrar por cuerpo"/>
+<input class="form-control" placeholder="Filtrar por título" id="title_filter"/>
+<input class="form-control mt-1" placeholder="Filtrar por cuerpo" id="body_filter"/>
 </div>
 
 <div class="flex-row space-x-3 flex-wrap mt-1">
@@ -53,7 +53,7 @@
     let delete_icons = document.getElementsByClassName("delete-icon")
     for(let i = 0; i < delete_icons.length; i++)
         delete_icons[i].addEventListener('click', (e)=>click_delete(e, delete_icons[i].name))
-    
+
 </script>
 
 <style>
