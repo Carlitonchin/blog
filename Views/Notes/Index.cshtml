@@ -15,14 +15,15 @@
 <input class="form-control mt-1" placeholder="Filtrar por cuerpo" id="body_filter"/>
 </div>
 
-<div class="flex-row space-x-3 flex-wrap mt-1">
+<div class="flex-row space-x-3 flex-wrap mt-1" id="container-cards">
 @foreach (var item in Model) {
     <a class="link-detail" asp-action="Details" asp-route-id="@item.Id"}>
         <div class="note-card">
             <div class="flex-row">
-            <h2>
+            <h2 class="title-note">
                 @item.Title
             </h2>
+            <p class="body-note" style="">@item.Body</p>
             <div class="card-options">
                     <img class="icon edit-icon" src="/icons/edit.svg" name="@item.Id"/>
                 
@@ -55,6 +56,8 @@
         delete_icons[i].addEventListener('click', (e)=>click_delete(e, delete_icons[i].name))
 
 </script>
+
+<script src="~/js/filter.js" asp-append-version="true"></script>
 
 <style>
     .link-detail{
