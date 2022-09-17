@@ -23,7 +23,7 @@ namespace blog.Controllers
         }
 
         // GET: Notes
-        public IActionResult Index()
+        public IActionResult Index(string? sortedBy, int? order)
         {
             if(_context.Note == null)
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -33,7 +33,22 @@ namespace blog.Controllers
             if(id == null)
                 return StatusCode(StatusCodes.Status500InternalServerError);
 
-            return View(_context.Note.Where(n=>n.UserId == id.Value));
+            ViewBag.sortedBy = sortedBy;
+            ViewBag.order = order;
+
+            if(sortedBy == null)
+                return View(_context.Note.Where(n=>n.UserId == id.Value));
+            
+            if(order == null)
+                order = 1;
+
+            if(sortedBy == "date")
+                return View(_context.Note.Where(n=>n.UserId == id.Value).OrderBy(m=>order*m.CreationDate.Ticks));
+            
+            if(order == 1)
+                return View(_context.Note.Where(n=>n.UserId == id.Value).OrderBy(m=>m.Title));
+
+            return View(_context.Note.Where(n=>n.UserId == id.Value).OrderByDescending(m=>m.Title));
         }
 
         // GET: Notes/Details/5
