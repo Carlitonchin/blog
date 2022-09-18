@@ -27,6 +27,14 @@ body {
   flex-direction: row;
 }
 
+.h-full{
+  height: 100%;
+}
+
+.h-big{
+  height: 33vh;
+}
+
 .space-between{
   justify-content: space-between;
 }
