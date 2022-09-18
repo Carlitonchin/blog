@@ -17,7 +17,7 @@ function filter_body(text){
     for(let i = 0; i < bodies.length; i++)
     {
         let body = bodies[i]
-        let parent = body.parentNode.parentNode.parentNode;
+        let parent = body.parentNode.parentNode;
         let ocurr = body.innerHTML.toLowerCase().includes(text.toLowerCase())
 
         parent.style.display = ocurr ? "block":"none";

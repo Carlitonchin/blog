@@ -52,7 +52,7 @@
                     <img class="icon delete-icon" src="/icons/delete.svg" name="@item.Id"/>
             </div>
             </div>
-            <p class="date-text">@Html.DisplayNameFor(model => model.CreationDate): <span class="date">@Html.DisplayFor(modelItem => item.CreationDate)</span></p>
+            <p class="date">@Html.DisplayNameFor(model => model.CreationDate): @Html.DisplayFor(modelItem => item.CreationDate)</p>
             <p class="body-note">@item.Body</p>
         </div>
         </a>
@@ -128,7 +128,6 @@
     }
 
     .note-card:hover{
-        background:black;
         background: rgba(0, 0, 0, 0.05);
         color:blue;
         scale:1.01;
@@ -161,10 +160,6 @@
 
     .delete-icon:hover{
         background:rgba(255, 0, 0, 0.215);
-    }
-
-    .date-text{
-        color:black;
     }
 
     .date{
