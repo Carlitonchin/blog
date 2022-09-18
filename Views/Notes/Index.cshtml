@@ -46,7 +46,6 @@
             <h4 class="title-note">
                 @item.Title
             </h4>
-            <p class="body-note" style="display:none;">@item.Body</p>
             <div class="card-options">
                     <img class="icon edit-icon" src="/icons/edit.svg" name="@item.Id"/>
                 
@@ -54,6 +53,7 @@
             </div>
             </div>
             <p class="date-text">@Html.DisplayNameFor(model => model.CreationDate): <span class="date">@Html.DisplayFor(modelItem => item.CreationDate)</span></p>
+            <p class="body-note">@item.Body</p>
         </div>
         </a>
 }
