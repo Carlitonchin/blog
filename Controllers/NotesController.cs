@@ -104,6 +104,8 @@ namespace blog.Controllers
             if(currentUserid.Value != note.UserId)
                 return StatusCode(StatusCodes.Status401Unauthorized); //a user cannot create a note on behalf of another user
 
+            note.CreationDate = DateTime.Now;
+            
             if (ModelState.IsValid)
             {
                 _context.Add(note);
