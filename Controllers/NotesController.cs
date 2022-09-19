@@ -46,9 +46,9 @@ namespace blog.Controllers
                 return View(_context.Note.Where(n=>n.UserId == id.Value).OrderBy(m=>order*m.CreationDate.Ticks));
             
             if(order == 1)
-                return View(_context.Note.Where(n=>n.UserId == id.Value).OrderBy(m=>m.Title));
+                return View(_context.Note.Where(n=>n.UserId == id.Value).OrderBy(m=>m.Title.ToLower()));
 
-            return View(_context.Note.Where(n=>n.UserId == id.Value).OrderByDescending(m=>m.Title));
+            return View(_context.Note.Where(n=>n.UserId == id.Value).OrderByDescending(m=>m.Title.ToLower()));
         }
 
         // GET: Notes/Details/5
