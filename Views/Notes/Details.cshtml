@@ -8,8 +8,8 @@
 
     <div class="flex-row align-center">
     <h3 class="m-0">@Html.DisplayFor(model => model.Title)</h3>
-    <a asp-action="Edit" asp-route-id="@Model.Id">
-    <img src="/icons/edit.svg" class="icon edit-icon ml-1"/>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="mleft-1">
+    <img src="/icons/edit.svg" class="icon edit-icon ml-5"/>
     </a>
     <a asp-action="Delete" asp-route-id="@Model.Id">
     <img src="/icons/delete.svg" class="icon delete-icon ml-0-5"/>
