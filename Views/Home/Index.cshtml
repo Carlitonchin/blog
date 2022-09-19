@@ -7,15 +7,32 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center" style="background:red;">
+<div id="main-div">
+        <div id="sub-main">
+<div class="text-center text-white">
     @if (SignInManager.IsSignedIn(User))
     {
     <h1 class="display-4">
         Hola @UserManager.GetUserName(User)!
     </h1>
+    <p>Apunta todo con BLOG.NET</p>
+    <a asp-action="Index" asp-controller="Notes" class="btn btn-primary">Mis Notas</a>
     }else{
         <h1>Bienvenido a BLOG.NET</h1>
+        <p>Maneja tus notas con nosotros</p>
+        <div class="flex-row space-x-3 align-center justify-center mtop-3">
+        <a class="nav-link btn btn-primary text-white" id="register" asp-area="Identity" asp-page="/Account/Register">Registrarse</a>
+    
+        <a class="nav-link btn btn-secondary text-white" id="login" asp-area="Identity" asp-page="/Account/Login">Iniciar Sesión</a>
+        </div>
     }
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
 </div>
+      </div>
+    </div>
+
+<style>
+    nav{
+        background: rgba(255, 255, 255, 0.063);
+    }
+</style>

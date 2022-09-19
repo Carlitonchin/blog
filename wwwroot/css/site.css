@@ -20,7 +20,8 @@ body {
 nav{
   height: 10vh;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.063);
+  background: rgba(0, 0, 0, 0.867);
+  margin-bottom: 1rem;
 }
 
 .nav-link{
@@ -43,6 +44,7 @@ footer{
   height: 100vh;
   position: absolute;
   top: 0;
+  left: 0;
   background: url("/img/back.jpg");
   background-position: center;
   background-size: cover;
@@ -54,11 +56,10 @@ footer{
   width: 100vw;
   height: 100vh;
   top: 0;
+  left: 0;
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,0.225945480731355) 0%, rgba(0,0,0,0.8393908588826156) 46%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding-top: 25vh;
 }
 
 .flex-col{
@@ -81,6 +82,10 @@ footer{
 
 .space-between{
   justify-content: space-between;
+}
+
+.justify-center{
+  justify-content: center;
 }
 
 .align-center{
@@ -154,7 +159,7 @@ footer{
   margin: 0;
 }
 
-.mt-3{
+.mtop-3{
   margin-top: 3rem;
 }
 
