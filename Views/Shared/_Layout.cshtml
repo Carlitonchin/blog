@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using blog.Areas.Identity.Data
+@inject SignInManager<User> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,9 +29,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Author">Autor</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {                       
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Notes" asp-action="Index">Mis Notas</a>
                         </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
