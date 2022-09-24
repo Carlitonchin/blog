@@ -12,6 +12,11 @@ builder.Services.AddDbContext<BlogContext>(options =>
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<BlogContext>();
 
+builder.Services.ConfigureApplicationCookie(options=>
+{
+    options.LoginPath = "/Account/Login";
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
