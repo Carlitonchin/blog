@@ -3,15 +3,13 @@ namespace blog.Models;
 public class NoteErrorViewModel{
     public int StatusCode {get; set;}
     public string Message {get;set;}
-    public string Action {get; set;}
 
-    public NoteErrorViewModel(int status, string message, string action){
+    public NoteErrorViewModel(int status, string message){
         this.StatusCode = status;
         this.Message = message;
-        this.Action = action;
     }
 
-    private static NoteErrorViewModel NewNoteErrorViewModel(int status, string action, int note_id){
+    private static NoteErrorViewModel NewNoteErrorViewModel(int status, int note_id){
         string message = "";
 
         if(status == CodeError.NotFound)
@@ -21,19 +19,19 @@ public class NoteErrorViewModel{
         else
             message = "Ocurrió un error inesperado, por favor contacte con el administrador";
 
-        return new NoteErrorViewModel(status, message, action);
+        return new NoteErrorViewModel(status, message);
     }
 
-    public static NoteErrorViewModel Internal(string action, int note_id){
-        return NewNoteErrorViewModel(CodeError.Internal, action, note_id);
+    public static NoteErrorViewModel Internal(){
+        return NewNoteErrorViewModel(CodeError.Internal, -1);
     }
 
-    public static NoteErrorViewModel NotFound(string action, int note_id){
-        return NewNoteErrorViewModel(CodeError.NotFound, action, note_id);
+    public static NoteErrorViewModel NotFound(int note_id){
+        return NewNoteErrorViewModel(CodeError.NotFound, note_id);
     }
 
-    public static NoteErrorViewModel NotAuthorized(string action, int note_id){
-        return NewNoteErrorViewModel(CodeError.NotAuthorized, action, note_id);
+    public static NoteErrorViewModel NotAuthorized(int note_id){
+        return NewNoteErrorViewModel(CodeError.NotAuthorized, note_id);
     }
 }
 
