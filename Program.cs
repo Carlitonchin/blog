@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using blog.Areas.Identity.Data;
+using blog.Models;
 using blog.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +14,11 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages(options =>
+{
+    options.RootDirectory = "/Views/User";
+});
 
 var app = builder.Build();
 

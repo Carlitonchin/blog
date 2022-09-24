@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Identity
-@using blog.Areas.Identity.Data
+@using blog.Models
 
 @inject SignInManager<User> SignInManager
 
@@ -16,10 +16,10 @@
 else
 {
     <li class="nav-item">
-        <a class="nav-link btn btn-primary text-white" id="register" asp-area="Identity" asp-page="/Account/Register">Registrarse</a>
+        <a class="nav-link btn btn-primary text-white" id="register" asp-page="/Account/Register">Registrarse</a>
     </li>
     <li class="nav-item ml-0-5">
-        <a class="nav-link btn btn-secondary text-white" id="login" asp-area="Identity" asp-page="/Account/Login">Iniciar Sesión</a>
+        <a class="nav-link btn btn-secondary text-white" id="login" asp-page="/Account/Login">Iniciar Sesión</a>
     </li>
 }
 </ul>

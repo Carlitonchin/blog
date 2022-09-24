@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using blog.Areas.Identity.Data;
-
 namespace blog.Models;
 
 public class Note{
