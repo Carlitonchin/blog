@@ -1,0 +1,9 @@
+@model blog.Models.NoteErrorViewModel;
+
+@{
+    ViewData["Title"] = "Error " + Model.StatusCode;
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>@Model.Message</p>
+<a class="btn btn-secondary" href="javascript: history.go(-1)">Volver</a>
