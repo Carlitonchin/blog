@@ -14,8 +14,10 @@ public class NoteErrorViewModel{
 
         if(status == CodeError.NotFound)
             message = "La nota con id = '" + note_id + "' no existe";
-        else if(status == CodeError.NotFound)
+        else if(status == CodeError.NotAuthorized)
             message = "Usted no es el autor de la nota con id ='" + note_id + "'";
+        else if(status == CodeError.BadRequest)
+            message = "Error en el request, intente navegar con los links de la página";
         else
             message = "Ocurrió un error inesperado, por favor contacte con el administrador";
 
@@ -33,10 +35,15 @@ public class NoteErrorViewModel{
     public static NoteErrorViewModel NotAuthorized(int note_id){
         return NewNoteErrorViewModel(CodeError.NotAuthorized, note_id);
     }
+
+    public static NoteErrorViewModel BadRequest(){
+        return NewNoteErrorViewModel(CodeError.BadRequest, -1);
+    }
 }
 
- static class CodeError{
+ public static class CodeError{
     public const int NotFound = 404;
     public const int NotAuthorized = 401;
     public const int Internal = 500;
+    public const int BadRequest = 400;
 }
