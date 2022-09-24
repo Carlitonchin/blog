@@ -16,7 +16,7 @@ namespace blog.Controllers
     public class NotesController : Controller
     {
         private readonly BlogContext _context;
-
+        private const string ErrorView = "Error";
         public NotesController(BlogContext context)
         {
             _context = context;
@@ -25,13 +25,17 @@ namespace blog.Controllers
         // GET: Notes
         public IActionResult Index(string? sortedBy, int? order)
         {
-            if(_context.Note == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(_context.Note == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
 
             var id = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(id == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(id == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
 
             ViewBag.sortedBy = sortedBy;
             ViewBag.order = order;
@@ -54,24 +58,34 @@ namespace blog.Controllers
         // GET: Notes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if(_context.Note == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(_context.Note == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
 
-            if (id == null)
-                return StatusCode(StatusCodes.Status400BadRequest);
+            if (id == null){
+                Response.StatusCode = CodeError.BadRequest;
+                return View(ErrorView, NoteErrorViewModel.BadRequest());
+            }
             
             var note = await _context.Note.FindAsync(id);
 
-            if (note == null)
-                return NotFound();
+            if (note == null){
+                Response.StatusCode = CodeError.NotFound;
+                return View(ErrorView, NoteErrorViewModel.NotFound((int)id));
+            }
 
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(currentUserId == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);    
+            if(currentUserId == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }  
 
-            if(currentUserId.Value != note.UserId)
-                return StatusCode(StatusCodes.Status401Unauthorized);
+            if(currentUserId.Value != note.UserId){
+                Response.StatusCode = CodeError.NotAuthorized;
+                return View(ErrorView, NoteErrorViewModel.NotAuthorized((int)id));
+            }
             
             return View(note);
         }
@@ -81,8 +95,10 @@ namespace blog.Controllers
         {
             var id = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(id == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(id == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
 
             ViewBag.UserId = id.Value;
 
@@ -98,16 +114,19 @@ namespace blog.Controllers
         {
             var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(currentUserid == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(currentUserid == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
             
-            if(currentUserid.Value != note.UserId)
-                return StatusCode(StatusCodes.Status401Unauthorized); //a user cannot create a note on behalf of another user
+            if(currentUserid.Value != note.UserId){
+                Response.StatusCode = CodeError.NotAuthorized;
+                return View(ErrorView, NoteErrorViewModel.NotAuthorized(note.Id));
+            }
 
-            note.CreationDate = DateTime.Now;
-            
             if (ModelState.IsValid)
             {
+                note.CreationDate = DateTime.Now;
                 _context.Add(note);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -120,15 +139,33 @@ namespace blog.Controllers
         // GET: Notes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if(_context.Note == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(currentUserid == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
 
-            if (id == null)
-                return NotFound();
+            if(_context.Note == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
+
+            if (id == null){
+                Response.StatusCode = CodeError.BadRequest;
+                return View(ErrorView, NoteErrorViewModel.BadRequest());
+            }
 
             var note = await _context.Note.FindAsync(id);
-            if (note == null)
-                return NotFound();
+            if (note == null){
+                Response.StatusCode = CodeError.NotFound;
+                return View(ErrorView, NoteErrorViewModel.NotFound((int)id));
+            }
+
+            if(currentUserid.Value != note.UserId){
+                Response.StatusCode = CodeError.NotAuthorized;
+                return View(ErrorView, NoteErrorViewModel.NotAuthorized(note.Id));
+            }
             
             return View(note);
         }
@@ -142,16 +179,21 @@ namespace blog.Controllers
         {
             if (id != note.Id)
             {
-                return NotFound();
+                Response.StatusCode = CodeError.NotFound;
+                return View(ErrorView, NoteErrorViewModel.NotFound((int)id));
             }
 
             var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(currentUserid == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(currentUserid == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
             
-            if(currentUserid.Value != note.UserId)
-                return StatusCode(StatusCodes.Status401Unauthorized);
+            if(currentUserid.Value != note.UserId){
+                Response.StatusCode = CodeError.NotAuthorized;
+                return View(ErrorView, NoteErrorViewModel.NotAuthorized(note.Id));
+            }
 
             if (ModelState.IsValid)
             {
@@ -164,7 +206,8 @@ namespace blog.Controllers
                 {
                     if (!NoteExists(note.Id))
                     {
-                        return NotFound();
+                        Response.StatusCode = CodeError.NotFound;
+                        return View(ErrorView, NoteErrorViewModel.NotFound(note.Id));
                     }
                     else
                     {
@@ -180,24 +223,34 @@ namespace blog.Controllers
         // GET: Notes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if(_context.Note == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(_context.Note == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
 
-            if (id == null)
-                return NotFound();
+            if (id == null){
+                Response.StatusCode = CodeError.BadRequest;
+                return View(ErrorView, NoteErrorViewModel.BadRequest());
+            }
 
             var note = await _context.Note.FindAsync(id);
 
-            if (note == null)
-                return NotFound();
+            if (note == null){
+                Response.StatusCode = CodeError.NotFound;
+                return View(ErrorView, NoteErrorViewModel.NotFound((int)id));
+            }
             
             var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(currentUserid == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if(currentUserid == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
             
-            if(note.UserId != currentUserid.Value)
-                return StatusCode(StatusCodes.Status401Unauthorized);
+            if(note.UserId != currentUserid.Value){
+                Response.StatusCode = CodeError.NotAuthorized;
+                return View(ErrorView, NoteErrorViewModel.NotAuthorized(note.Id));
+            }
 
             return View(note);
         }
@@ -207,8 +260,10 @@ namespace blog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Note == null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            if (_context.Note == null){
+                Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+            }
             
             var note = await _context.Note.FindAsync(id);
 
@@ -216,11 +271,15 @@ namespace blog.Controllers
             {
                 var currentUserid = User.FindFirst(ClaimTypes.NameIdentifier);
             
-                if(currentUserid == null)
-                    return StatusCode(StatusCodes.Status500InternalServerError);
+                if(currentUserid == null){
+                    Response.StatusCode = CodeError.Internal;
+                return View(ErrorView, NoteErrorViewModel.Internal());
+                }
 
-                if(currentUserid.Value != note.UserId)
-                    return StatusCode(StatusCodes.Status401Unauthorized);
+                if(currentUserid.Value != note.UserId){
+                    Response.StatusCode = CodeError.NotAuthorized;
+                return View(ErrorView, NoteErrorViewModel.NotAuthorized(note.Id));
+                }
 
                 _context.Note.Remove(note);
                 await _context.SaveChangesAsync();
